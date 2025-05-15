@@ -21,7 +21,16 @@ const timeline = (function () {
     var references = {};
 
     var selectorColors = ['#1a8e6a', '#f9ba02', '#6762a2', '#eb298d', '#7cc522', '#ec6502'];
-
+// 自定义年份颜色映射（颜色来源于 userDefinedTagCategories.year.values）
+    var yearColorMap = {
+        "1987": "#fbb4ae",
+        "2001": "#b3cde3",
+        "2016": "#ccebc5",
+        "2019": "#decbe4",
+        "2021": "#fed9a6",
+        "2023": "#ffffcc",
+        "2024": "#e5d8bd"
+    };
     var niceIntervals = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
     var maxYearIntervals = 10;
     var maxFrequencyIntervals = 5;
@@ -220,7 +229,7 @@ const timeline = (function () {
             return d3.descending(av, bv);
         });
     }
-
+    var stackedData = {};
     function computeYearlyData(data, referenceCount, dataSelector) {
         $.each(bib.filteredEntries, function (id, entry) {
             var passedFilter = bib.filteredEntries[id] ? true : false;
@@ -393,7 +402,10 @@ const timeline = (function () {
             });
         chart.selectAll('svg').data(d3data).enter().append('rect')
             .attr('class', 'bar total tooltip')
-            .style('fill', 'var(--bgColor3)')
+            .style('fill', function (d) {
+                var year = d.key.toString();
+                return yearColorMap[year] || 'var(--bgColor3)';
+            })
             .style('stroke', 'black')
             .attr('shape-rendering', 'crispEdges')
             .attr('x', function (d) {

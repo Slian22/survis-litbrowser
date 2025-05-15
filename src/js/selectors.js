@@ -1,3 +1,12 @@
+const prettyMethodCategoryLabels = {
+    "metric-centric": "📏 Metric-Centric Methods",
+    "visual-comparison": "🔍 Visual Comparison Techniques",
+    "teaching-tool": "🎓 Pedagogical Tools",
+    "framework-tool": "🧰 Framework / Tool",
+    "elbow-method": "📐 Elbow / SSE",
+    "geometric-structural": "📊 Geometric Analysis",
+    "other": "📁 Other"
+};
 const selectors = (function() {
 
     var tokenSearchSimilarityCache = {};
@@ -36,8 +45,18 @@ const selectors = (function() {
                     selectorDiv.addClass(invertedClass);
                     var lockedClass = (selector['lock'] ? ' locked' : '');
                     selectorDiv.addClass(lockedClass);
-                    var text = '';
-                    text = latexUtil.latexToHtml(selector['text']);
+                    let rawText = selector['text'];
+                    let text = '';  //
+
+                    let textKey = rawText;
+                    if (rawText.startsWith('method_category:')) {
+                        textKey = rawText.split(':')[1];
+                    }
+                    if (selector['type'] === 'keywords' && prettyMethodCategoryLabels[textKey]) {
+                        text = prettyMethodCategoryLabels[textKey];
+                    } else {
+                        text = latexUtil.latexToHtml(rawText);
+                    }
                     if (selector.type == 'citations_incoming') {
                         text = 'citing ' + text;
                     } else if (selector.type == 'citations_outgoing') {
@@ -493,4 +512,9 @@ const selectors = (function() {
         return 0.0;
     }
 
-})();
+})();$(document).ready(function () {
+    // 默认激活这三个 method_category 标签
+    selectors.toggleSelector('keywords', 'method_category:metric-centric');
+    selectors.toggleSelector('keywords', 'method_category:visual-comparison');
+    selectors.toggleSelector('keywords', 'method_category:teaching-tool');
+});

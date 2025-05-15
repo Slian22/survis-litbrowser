@@ -1,1 +1,1 @@
-const availableImg = ["Beck2016Visual"];
+const availableImg = ["shutaywi2021silhouette","sun2024circular","tibshirani2001estimating","shi2021quantitative","rousseeuw1987silhouettes","fuchs2019educlust","xu2016reviews","januzaj2023determining","bagirov2023finding","schubert2023stop"];
